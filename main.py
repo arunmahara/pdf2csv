@@ -7,11 +7,13 @@ def main(pdf_file: str, output_folder: str):
 
 
 if __name__ == "__main__":
+    # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Extract tables from PDF file.")
     parser.add_argument('-s', '--source', help="Path to the PDF file", dest="pdf_file")
     parser.add_argument('-o', '--output', help="Path to the output folder", dest="output_folder")
     args = parser.parse_args()
 
+    # Check if the required arguments are provided
     assert args.pdf_file is not None, "Must provide a PDF file!"
     assert args.output_folder is not None, "Must provide a output folder!"
 
