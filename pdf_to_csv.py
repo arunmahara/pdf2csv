@@ -1,3 +1,4 @@
+import os
 import tabula
 import PyPDF2
 import logging
@@ -11,7 +12,18 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 
+def is_pdf(file_path: str) -> bool:
+    """
+    Check if the file is a PDF file.
+    """
+    _, file_ext = os.path.splitext(file_path)
+    return file_ext.lower() == ".pdf"
+
+
 def is_pdf_password_protected(pdf_file_path: str) -> bool:
+    """
+    Check if the PDF file is password protected.
+    """
     with open(pdf_file_path, "rb") as file:
         reader = PyPDF2.PdfReader(file)
         if reader.is_encrypted:
@@ -21,8 +33,13 @@ def is_pdf_password_protected(pdf_file_path: str) -> bool:
 
 
 def extract_table_from_pdf(pdf_file_path: str, output_folder_path: str) -> str:
-
+    """
+    Extract tables from a PDF file and save them as CSV files.
+    """
     try:
+        if not is_pdf(pdf_file_path):
+            log.error(f"Incorrect file type. {pdf_file_path} is not a PDF file.")
+            return
 
         password = None
         if is_pdf_password_protected(pdf_file_path):
