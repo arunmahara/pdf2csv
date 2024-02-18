@@ -32,6 +32,21 @@ def is_pdf_password_protected(pdf_file_path: str) -> bool:
             return False
 
 
+def check_for_password(pdf_file_path: str) -> str:
+    """
+    Check if the PDF is password protected and ask for the password if it is.
+    """
+    password = None
+
+    # Check if the PDF is password protected
+    if is_pdf_password_protected(pdf_file_path):
+        log.info(f"PDF {pdf_file_path} is password protected.")
+        # Ask for the password
+        password = getpass("Enter the password: ")
+
+    return password
+
+
 def extract_table_from_pdf(pdf_file_path: str, output_folder_path: str) -> str:
     """
     Extract tables from a PDF file and save them as CSV files.
@@ -43,11 +58,7 @@ def extract_table_from_pdf(pdf_file_path: str, output_folder_path: str) -> str:
             return
 
         # Check if the PDF is password protected
-        password = None
-        if is_pdf_password_protected(pdf_file_path):
-            log.info(f"PDF {pdf_file_path} is password protected.")
-            # Ask for the password
-            password = getpass("Enter the password: ")
+        password = check_for_password(pdf_file_path)
 
         # Read tables from the PDF
         table_areas = tabula.read_pdf(pdf_file_path, pages='all', multiple_tables=True, stream=True, password=password)

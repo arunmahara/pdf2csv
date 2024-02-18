@@ -1,2 +1,3 @@
 tabula-py[jpype]
 PyPDF2==3.0.1
+pytest==7.4.3
